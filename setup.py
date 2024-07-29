@@ -4,7 +4,6 @@ import sys
 
 from setuptools import setup, find_packages
 from setuptools.command.install import install as InstallCommand
-from setuptools.command.test import test as TestCommand
 
 version = "3.14.6"
 requirements = "libxml2-dev libxslt-dev python-dev"
@@ -20,28 +19,6 @@ class Install(InstallCommand):
         # proc.wait()
         InstallCommand.run(self)
 
-
-class Test(TestCommand):
-
-    user_options = [('pytest-args=', 'a', "")]
-
-    def initialize_options(self):
-
-        TestCommand.initialize_options(self)
-        self.pytest_args = []
-
-    def finalize_options(self):
-
-        TestCommand.finalize_options(self)
-        self.test_args = []
-        self.test_suite = True
-
-    def run_tests(self):
-
-        import pytest
-        errno = pytest.main(self.pytest_args)
-        sys.exit(errno)
-
 try:
     long_description = open('README.md', encoding="utf-8").read()
 except TypeError:
@@ -56,7 +33,6 @@ setup(
     scripts=['wdc'],
     test_suite='tests',
     tests_require=['pytest'],
-    cmdclass={'install': Install, 'test': Test},
     description='WebDAV client, based on original package https://github.com/designerror/webdav-client-python but '
                 'uses requests instead of PyCURL',
     long_description=long_description,
